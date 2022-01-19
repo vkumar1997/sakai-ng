@@ -23,11 +23,21 @@ import { MenuService } from '@data/service/app.menu.service';
 import { ConfigService } from '@data/service/app.config.service';
 import { ItemService } from '@data/service/itemservice/item.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
+        ButtonModule,
         FormsModule,
+        InputSwitchModule,
+        RadioButtonModule,
+        RippleModule,
         AppRoutingModule,
         HttpClientModule,
         DashboardModule,

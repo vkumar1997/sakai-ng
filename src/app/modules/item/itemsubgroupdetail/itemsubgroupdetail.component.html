@@ -1,18 +1,18 @@
-
+<!-- 
 <div>Item Sub-Group Name: {{itemsubgroup.ItemSubGroupName}}</div>
 <div>Item Sub-Group Description: {{itemsubgroup.ItemSubGroupDesc}}</div>
 
 
 <p-divider></p-divider>
-<ng-container *ngFor="let itemPropertyType of itemsubgroup.ItemPropertyTypeList;">
+<ng-container *ngFor="let itemPropertyType of itemgroup.ItemPropertyTypeList;">
     <p-chip styleClass="mr-2" [removable]="true" label="{{itemPropertyType.PropertyName}}"></p-chip>
 </ng-container>
 
 <p-divider></p-divider>
 <ng-container class="p-field p-col-12 p-md-4">
     <span class="p-float-label my-20">
-        <input type="text" id="addPropertyType" (change)="onPropertyTypeAddEvent($event)" pInputText> 
+        <input type="text" id="addPropertyType" pInputText> 
         <label for="addPropertyType">Add Property Type</label>
     </span>
 </ng-container>
-
+ -->

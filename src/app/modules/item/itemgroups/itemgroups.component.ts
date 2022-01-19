@@ -1,39 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemGroups } from '@data/schema/item/itemgroups/itemgroups.model';
 import { ItemService } from '@data/service/itemservice/item.service';
 import {DynamicDialogRef, DialogService} from 'primeng/dynamicdialog';
-import { trigger,state,style,transition,animate } from '@angular/animations';
 import { ItemSubGroupDetailComponent } from '../itemsubgroupdetail/itemsubgroupdetail.component';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-itemgroups-root',
   templateUrl: './itemgroups.component.html',
-  animations: [
-      trigger('rowExpansionTrigger', [
-          state('void', style({
-              transform: 'translateX(-10%)',
-              opacity: 0
-          })),
-          state('active', style({
-              transform: 'translateX(0)',
-              opacity: 1
-          })),
-          transition('* <=> *', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
-      ])
-  ]
 })
 
 export class ItemGroupsComponent implements OnInit {
-  ItemGroupsList: ItemGroups[];
-  selectedItemGroup: ItemGroups;
+  itemgroups: TreeNode[];
   ref: DynamicDialogRef;
+  cols: any[];
+  selectedColumns: any[];
   constructor(
     private itemService: ItemService,
     public dialogService: DialogService
     ) { }
   
   ngOnInit() {
-    this.ItemGroupsList = this.itemService.getItemGroupList()
+    this.itemService.getItemGroupHierarchy().then(itemgroups => this.itemgroups = itemgroups);
+    this.cols = [
+      {field: "ItemGroupCode", header: "Item Group Code", multi_select_inactive: true, editing_disabled: true},
+      {field: "ItemGroupName", header: "Item Group Name", multi_select_inactive: true, editing_disabled: false},
+      {field: "ItemGroupDesc", header: "Item Group Desc", multi_select_inactive: false, editing_disabled: false},
+      {field: "CreatedBy", header: "Created By", multi_select_inactive: false, editing_disabled: true},
+      {field: "CreatedDt", header: "Created Dt", multi_select_inactive: false, editing_disabled: true},
+      {field: "ModifiedBy", header: "Modified By", multi_select_inactive: false, editing_disabled: true},
+      {field: "ModifiedDt", header: "Modified Dt", multi_select_inactive: false, editing_disabled: true},
+    ]
+    this.selectedColumns = this.cols.slice(0,3);
   }
 
   public onItemSubGroupRowSelect(itemsubgroup)

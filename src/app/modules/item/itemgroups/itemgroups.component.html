@@ -1,4 +1,4 @@
-<p-table [value]="ItemGroupsList" dataKey="ItemGroupCdSr" responsiveLayout="scroll" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+<!-- <p-table [value]="ItemGroupsList" dataKey="ItemGroupCdSr" responsiveLayout="scroll" [paginator]="true" [rows]="5" responsiveLayout="scroll">
     <ng-template pTemplate="header">
         <tr>
             <th style="width: 3rem"></th>
@@ -60,4 +60,39 @@
             </td>
         </tr>
     </ng-template>
-</p-table>
+</p-table> -->
+
+<p-treeTable [value]="itemgroups" [paginator]="true" [rows]="10" [columns]="selectedColumns" [resizableColumns]="true">
+    <ng-template pTemplate="caption">
+        <div style="text-align:left">
+            <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                        selectedItemsLabel="{0} columns selected" [style]="{'width': '20em'}" defaultLabel="Choose Columns" optionDisabled="multi_select_inactive"></p-multiSelect>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [ttSortableColumn]="col.field" ttResizableColumn>
+                {{col.header}}
+                <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns; let i = index" ttEditableColumn [ngClass]="{'p-toggler-column': i === 0}">
+                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0"></p-treeTableToggler>
+                <p-treeTableCellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="rowData[col.field]" [disabled]="rowData[col.editing_disabled]">
+                    </ng-template>
+                    <ng-template pTemplate="output">{{rowData[col.field]}}</ng-template>
+                </p-treeTableCellEditor>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>        
+            <td [attr.colspan]="cols.length">No groups found.</td>
+        </tr>
+    </ng-template>
+</p-treeTable>

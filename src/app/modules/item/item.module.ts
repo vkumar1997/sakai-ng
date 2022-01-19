@@ -9,6 +9,9 @@ import { ChipModule } from 'primeng/chip';
 import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
 import { DialogService } from 'primeng/dynamicdialog';
+import {TreeTableModule} from 'primeng/treetable';
+import {MultiSelectModule} from 'primeng/multiselect';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { DialogService } from 'primeng/dynamicdialog';
     CardModule,
     ChipModule,
     DividerModule,
-    TableModule
+    TableModule,
+    TreeTableModule,
+    MultiSelectModule,
+    FormsModule
   ],
   providers: [
     DialogService

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ItemGroup } from '@data/schema/item/itemgroup/itemgroup.model';
 import {DynamicDialogConfig} from 'primeng/dynamicdialog';
-import { ItemSubGroups } from '../../../data/schema/item/itemsubgroups/itemsubgroups.model';
 import { ItemPropertyType } from 'src/app/data/schema/item/itempropertytype/itempropertytype.model';
 
 @Component({
@@ -9,19 +9,19 @@ import { ItemPropertyType } from 'src/app/data/schema/item/itempropertytype/item
   styleUrls: ['./itemsubgroupdetail.component.scss']
 })
 export class ItemSubGroupDetailComponent implements OnInit {
-  itemsubgroup: ItemSubGroups;
+  itemgroup: ItemGroup;
   constructor(
     public config: DynamicDialogConfig
   ) { }
 
   ngOnInit(): void {
-    this.itemsubgroup = this.config.data.itemsubgroup;
+    this.itemgroup = this.config.data.itemgroup;
   }
 
-  onPropertyTypeAddEvent(event: any){
-    let itempropertytype: ItemPropertyType ={ItemPropertyTypeCdSr: null, ItemSubGroupCdSr: this.itemsubgroup.ItemSubGroupCdSr, PropertyName: event.target.value, CreatedBy: "Vikas", CreatedDt: "CreatedDt", ModifiedBy: "Vikas", ModifiedDt: "ModifiedDt"}
-    this.itemsubgroup.ItemPropertyTypeList.push(itempropertytype);
-    event.target.value = "";
-  }
+  // onPropertyTypeAddEvent(event: any){
+  //   let itempropertytype: ItemPropertyType ={ItemPropertyTypeCdSr: null, ItemSubGroupCdSr: this.itemsubgroup.ItemSubGroupCdSr, PropertyName: event.target.value, CreatedBy: "Vikas", CreatedDt: "CreatedDt", ModifiedBy: "Vikas", ModifiedDt: "ModifiedDt"}
+  //   this.itemgroup.ItemPropertyTypeList.push(itempropertytype);
+  //   event.target.value = "";
+  // }
 
 }
