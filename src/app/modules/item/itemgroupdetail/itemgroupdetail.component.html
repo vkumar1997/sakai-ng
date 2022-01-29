@@ -1,0 +1,44 @@
+<p-card>
+    <div>
+        <span class="p-float-label">
+            <input type="text" id="groupname" size="50" pInputText [disabled]="disabled" [(ngModel)]="itemnodecopy.data['ItemGroupName']"> 
+            <label for="groupname">Group Name</label>
+        </span>
+    </div>
+    <div>
+        <span class="p-float-label mt-4">
+            <textarea inputId="groupdesc" rows="10" style="resize: none;" cols="50" [disabled]="disabled" [(ngModel)]="itemnodecopy.data['ItemGroupDesc']" pInputTextarea></textarea> 
+            <label for="groupdesc">Group Description</label>
+        </span>
+    </div>
+    <p-divider></p-divider>
+    <ng-container *ngFor="let groupproperty of itemnodecopy.data.ItemGroupProperty; let i = index;">
+        <p-chip style="cursor: pointer;" (click)="chipClick(i); displayDeleteDialog=!disabled;" styleClass="mr-2" label="{{groupproperty}}"></p-chip>
+    </ng-container>
+    <ng-container *ngIf="!disabled">
+        <p-divider></p-divider>
+        <ng-container  class="p-field p-col-12 p-md-4">
+            <span class="p-float-label my-20">
+                <input type="text" id="addPropertyType" (change)="onGroupPropertyAddEvent($event)" pInputText> 
+                <label for="addPropertyType">Add Property Type</label>
+            </span>
+        </ng-container>
+
+        <p-divider></p-divider>
+        <div style="text-align: center;">
+            <button pButton pRipple icon="pi pi-save" class="p-button-rounded p-button-primary" (click)="saveitemgroup()"></button>
+        </div>
+    </ng-container>
+</p-card>
+
+<p-dialog header="Delete/Rename Property" [(visible)]="displayDeleteDialog" [draggable]="true">
+    <p-divider></p-divider>
+    <span class="p-float-label">
+        <input [(ngModel)]="txtPropertyRename" type="text" id="txtRename" pInputText> 
+        <label for="txtRename">Rename Property</label>
+    </span>
+    <ng-template pTemplate="footer">
+        <p-button *ngIf="!txtPropertyRename" (click)="deleteProperty()" label="Delete" styleClass="p-button-text"></p-button>
+        <p-button *ngIf="txtPropertyRename" (click)="renameProperty()" label="Rename" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

@@ -1,27 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { AppMainComponent } from '@app/app.main.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'app-menu',
     template: `
-        <div class="layout-menu-container">
-            <ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
-                <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
-                    <div class="layout-menuitem-root-text" [attr.aria-label]="item.label">{{item.label}}</div>
-                    <ul role="menu">
-                        <li app-menuitem *ngFor="let child of item.items" [item]="child" [index]="i" role="none"></li>
-                    </ul>
-                </li>
-                <a href="https://www.primefaces.org/primeblocks-ng/#/">
-                    <img src="assets/layout/images/{{appMain.config.dark ? 'banner-primeblocks-dark' : 'banner-primeblocks'}}.png" alt="Prime Blocks" class="w-full mt-3"/>
-                </a>
-            </ul>
-        </div>
+        <p-panelMenu [model]="model"></p-panelMenu>
     `
 })
 export class AppMenuComponent implements OnInit {
 
-    model: any[];
+    model: MenuItem[];
 
     constructor(public appMain: AppMainComponent) { }
 

@@ -12,9 +12,9 @@ import { ConfigService } from '@data/service/app.config.service';
 })
 export class AppConfigComponent implements OnInit, OnDestroy {
 
-    scale: number = 14;
+    scale: number = 13;
 
-    scales: any[] = [12, 13, 14, 15, 16];
+    scales: any[] = [10, 11, 12, 13, 14, 15, 16, 17, 18];
 
     config: AppConfig;
 
@@ -26,10 +26,10 @@ export class AppConfigComponent implements OnInit, OnDestroy {
         this.config = this.configService.config;
         this.subscription = this.configService.configUpdate$.subscribe(config => {
             this.config = config;
-            this.scale = 14;
-
-            this.applyScale();
         });
+        
+        this.scale = 12;
+        this.applyScale();
     }
 
     onConfigButtonClick(event) {

@@ -1,68 +1,17 @@
-<!-- <p-table [value]="ItemGroupsList" dataKey="ItemGroupCdSr" responsiveLayout="scroll" [paginator]="true" [rows]="5" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
-        <tr>
-            <th style="width: 3rem"></th>
-            <th pSortableColumn="ItemGroupCd">Item Group Code <p-sortIcon field="ItemGroupCd"></p-sortIcon></th>
-            <th pSortableColumn="ItemGroupName">Item Group Name <p-sortIcon field="ItemGroupName"></p-sortIcon></th>
-            <th pSortableColumn="ItemGroupDesc">Item Group Description <p-sortIcon field="ItemGroupDesc"></p-sortIcon></th>
-            <th pSortableColumn="CreatedBy">Created/Modified By <p-sortIcon field="CreatedBy"></p-sortIcon></th>
-        </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-itemgroup let-expanded="expanded">
-        <tr>
-            <td>
-                <button type="button"  pButton pRipple [pRowToggler]="itemgroup" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-            </td>
-            <td>{{itemgroup.ItemGroupCd}}</td>
-            <td>{{itemgroup.ItemGroupName}}</td>
-            <td>{{itemgroup.ItemGroupDesc}}</td>
-            <td>{{itemgroup.CreatedBy}}</td>
-        </tr>
-    </ng-template>
-
-    <ng-template pTemplate="rowexpansion" let-itemgroup>
-        <tr>
-            <td colspan="5">
-                <div class="p-p-3">
-                    <p-card>
-                        <p-table [value]="itemgroup.SubGroupsList" dataKey="ItemSubGroupCdSr">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th style="width: 3rem"></th>
-                                    <th pSortableColumn="ItemSubGroupCd">Item Subgroup Code <p-sortIcon field="ItemSubGroupCd"></p-sortIcon></th>
-                                    <th pSortableColumn="ItemSubGroupName">Item Subgroup Name <p-sortIcon field="ItemSubGroupName"></p-sortIcon></th>
-                                    <th pSortableColumn="ItemSubGroupDesc">Item Subgroup Description <p-sortIcon field="ItemSubGroupDesc"></p-sortIcon></th>
-                                    <th pSortableColumn="CreatedBy">Created/Modified By <p-sortIcon field="CreatedBy"></p-sortIcon></th>
-                                    <th></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-subgroup>
-                                <tr>
-                                    <td style="width: 3rem"></td>
-                                    <td>{{subgroup.ItemSubGroupCd}}</td>
-                                    <td>{{subgroup.ItemSubGroupName}}</td>
-                                    <td>{{subgroup.ItemSubGroupDesc}}</td>
-                                    <td>{{subgroup.CreatedBy}}}</td>
-                                    <td>
-                                        <button type="button" pButton pRipple icon="pi pi-search" (click)="onItemSubGroupRowSelect(subgroup)"></button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="emptymessage">
-                                <tr>
-                                    <td colspan="6">There are no sub categories under this group yet.</td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </p-card>
-                </div>
-            </td>
-        </tr>
-    </ng-template>
-</p-table> -->
-
-<p-treeTable [value]="itemgroups" [paginator]="true" [rows]="10" [columns]="selectedColumns" [resizableColumns]="true">
+<p-card>
+    <span class="p-float-label">
+        <input style="width: 100%;" id="txtSearchItemGroup" type="text" (input)="txtSearchItemGroupChange($event.target.value)" pInputText/>
+        <label for="txtSearchItemGroup">Search Item Groups</label>
+    </span>
+    <p-listbox *ngIf="globalSearchPhrase" [(ngModel)]="globalSearchSelectedItem" [options]="searchResults" optionLabel="suggestion" Value="code"></p-listbox>
+    <ng-container *ngIf="globalSearchSelectedItem" class="m-5">
+        <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-primary m-3" (click)="additemgroup(globalSearchSelectedItem.itemnode)"></button>
+        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success m-3" (click)="edititemgroup(globalSearchSelectedItem)"></button>
+        <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning m-3" (click)="viewitemgroup(globalSearchSelectedItem.itemnode)"></button>
+        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger m-3" (click)="deleteitemgroup(globalSearchSelectedItem.itemnode)"></button>
+    </ng-container>
+</p-card>
+<p-treeTable #tt [value]="itemgroups" [paginator]="true" [rows]="10" [columns]="selectedColumns" [resizableColumns]="true">
     <ng-template pTemplate="caption">
         <div style="text-align:left">
             <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
@@ -71,28 +20,62 @@
     </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns" [ttSortableColumn]="col.field" ttResizableColumn>
+            <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
                 {{col.header}}
-                <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+                <span *ngIf="col.sortable">
+                    <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+                </span>
             </th>
+            <th>
+            </th>
+        </tr>
+        <tr style="width: 100%;">
+            <th *ngFor="let col of columns">
+                <span *ngIf="col.filter">
+                    <input pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                </span>
+            </th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
         <tr>
-            <td *ngFor="let col of columns; let i = index" ttEditableColumn [ngClass]="{'p-toggler-column': i === 0}">
-                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0"></p-treeTableToggler>
-                <p-treeTableCellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="rowData[col.field]" [disabled]="rowData[col.editing_disabled]">
-                    </ng-template>
-                    <ng-template pTemplate="output">{{rowData[col.field]}}</ng-template>
-                </p-treeTableCellEditor>
+            <td *ngFor="let col of columns; let i = index">
+                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                <span *ngIf="col.header!='Properties'">{{rowData[col.field]}}</span>
+                <span *ngIf="col.header=='Properties'">
+                    <ng-container *ngFor="let groupproperty of rowData[col.field];">
+                        <p-tag styleClass="m-1" value="{{groupproperty}}"></p-tag>
+                    </ng-container>
+                </span>
+            </td>
+            <td>
+                <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-primary mr-2" (click)="additemgroup(rowNode)"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="edititemgroup(rowNode)"></button>
+                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning mr-2" (click)="viewitemgroup(rowNode)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteitemgroup(rowNode)"></button>
             </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>        
-            <td [attr.colspan]="cols.length">No groups found.</td>
+            <td [attr.colspan]="selectedColumns.length">No groups found.</td>
+            <td></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" let-columns>
+        <tr>
+            <td *ngFor="let col of columns">
+            </td>
+            <td>
+                <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-primary mr-2" (click)="addrootgroup()"></button> 
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <tr>        
+            <td [attr.colspan]="selectedColumns.length">There are {{itemgroups?.length}} root item groups.</td>
+            <td></td>
         </tr>
     </ng-template>
 </p-treeTable>

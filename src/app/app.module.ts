@@ -28,6 +28,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import {PanelMenuModule} from 'primeng/panelmenu';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { RippleModule } from 'primeng/ripple';
         CoreModule,
         DataModule,
         SharedModule,
-        ItemModule
+        ItemModule,
+        PanelMenuModule
     ],
     declarations: [
         AppComponent,
